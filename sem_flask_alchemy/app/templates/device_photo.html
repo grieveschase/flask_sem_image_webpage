@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Device Info{% endblock %}
+
+{% block page_content %}
+<style>
+table, th, td {
+  border: 1px solid black;
+	font-size: 16px;
+}
+tr.header3 {
+  background-color: #80e5ff;
+}
+tr.header2 {
+  background-color: #EAEDED;
+}
+tr.header1 {
+  background-color: #FDFEFE;
+}
+</style>
+<div class="page-header">
+    <h2>Search Device Level Photo Information</h2>
+		<h4>View which tools a device runs on for a given layer.</h4>
+</div>
+{{ wtf.quick_form(form) }}
+{% if known %}
+  <div>
+    <h4>Query Input: {{ device_input }}</h4>
+		<h4>&#9989; P : P</h4>
+		<h4>&#9925; PD_T : P</h4>
+		<h4>&#10067; Other, not good not bad, dunno.</h4>
+    <table style="width:50%">
+    {% for device in device_data %}
+      <tr class="header3"><th colspan="2">Device: {{ device[0][1] }}, Process: {{ device[0][0] }} </th></tr>
+        <tr>
+          <th>Layer</th>
+          <th>Tool</th>
+          <th>Recipe</th>
+        </tr>
+        {% for line in device %}
+          <tr class="{{ line[-1] }}">
+            <td>{{ line[2] }}</td>
+            <td>{{ tool_status_dict[line[3]][1]|safe }} {{ line[3] }} : {{ tool_status_dict[line[3]][0] }}</td>
+            <td>{{ line[4] }}</td>
+          </tr>
+        {% endfor %}
+    {% endfor %}
+    </table>
+  </div>
+<div>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+</div>
+{% endif %}
+{% endblock %}

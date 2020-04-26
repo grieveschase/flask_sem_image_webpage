@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %} Pattern FOV{% endblock %}
+{% import "_macros.html" as macros %}
+
+{% macro lot_selection_table(lots) %}
+<table id="myTable">
+	<tr class="header">
+		<th style="width:10%;">Lot Recipe</th>
+		<th style="width:10%;">Wafer</th>
+		<th style="width:10%;">Date</th>
+	</tr>
+	{% for lot in lots %}
+	<tr>
+		<td><a href="{{ url_for('.patternfov_view', t=tool_route, l=lot[0], s=lot[1],r=lot[2],p=lot[3],dd=lot[4]) }}"> {{ lot[0] }} {{ lot[2] }}</a></td>
+		<td>{{ lot[1] }}</td>
+		<td>{{ lot[4].strftime('%Y-%m-%d %H:%M') }}</td>
+	</tr>
+	{% endfor %}
+	{% endmacro %}
+
+
+{% block page_content %}
+<style>
+	* {
+		box-sizing: border-box;
+	}
+	#myInput {
+		background-position: 10px 10px;
+		background-repeat: no-repeat;
+		width: 100%;
+		font-size: 16px;
+		padding: 12px 20px 12px 40px;
+		border: 1px solid #ddd;
+		margin-bottom: 12px;
+	}
+	#myTable {
+		border-collapse: collapse;
+		width: 100%;
+		border: 1px solid #ddd;
+		font-size: 18px;
+	}
+	#myTable th, #myTable td {
+		text-align: left;
+		padding: 12px;
+	}
+	#myTable tr {
+		border-bottom: 1px solid #ddd;
+	}
+	#myTable tr.header, #myTable tr:hover {
+		background-color: #f1f1f1;
+	}
+</style>
+<div class="page-header">
+    <h3>Pattern FOV {{ tool_route|title }}</h3>
+		{{ wtf.quick_form(form) }}
+</div>
+	{% if lots %}
+		{{ lot_selection_table(lots) }}
+	{% endif %}
+<div>
+
+
+
+{% endblock %}

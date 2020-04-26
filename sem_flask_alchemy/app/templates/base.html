@@ -1,0 +1,98 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation" style="background-color: #003d66">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url_for('main.index') }}"><font color='white'>Main</font></a>
+        </div>
+        <div class="navbar-collapse collapse">
+
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <font color='white'>Vera 401</font> <b class="caret"></b>
+                </a>
+              <ul class="dropdown-menu">
+                  <li><a href="{{ url_for('main.measdisplay_home', tool_route='vera401') }}"><font color='Black'>Obs Targets Vera401</font></a></li>
+                  <li><a href="{{ url_for('main.patternfov_home', tool_route='vera401') }}"><font color='Black'>Pattern FOV Vera401</font></a></li>
+              </ul>
+            </li>
+          </ul>
+
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <font color='white'>Vera 402</font> <b class="caret"></b>
+                </a>
+              <ul class="dropdown-menu">
+                  <li><a href="{{ url_for('main.measdisplay_home', tool_route='vera402') }}"><font color='Black'>Obs Targets Vera402</font></a></li>
+                  <li><a href="{{ url_for('main.patternfov_home', tool_route='vera402') }}"><font color='Black'>Pattern FOV Vera402</font></a></li>
+              </ul>
+            </li>
+          </ul>
+
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <font color='white'>Verity 401</font> <b class="caret"></b>
+                </a>
+              <ul class="dropdown-menu">
+                  <li><a href="{{ url_for('main.measdisplay_home', tool_route='verity401') }}"><font color='Black'>Obs Targets Verity401</font></a></li>
+                  <li><a href="{{ url_for('main.patternfov_home', tool_route='verity401') }}"><font color='Black'>Pattern FOV Verity401</font></a></li>
+              </ul>
+            </li>
+          </ul>
+          
+            {% if current_user.is_administrator() %}
+              <ul class="nav navbar-nav">
+                  <li><a href="{{ url_for('auth.user_names') }}"><font color='white'>Admin Control</font></a></li>
+              </ul>
+            {% endif %}
+
+            <ul class="nav navbar-nav navbar-right">
+              {% if current_user.is_authenticated %}
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('auth.logout') }}"><font color='white'>Log Out</font></a></li>
+                </ul>
+              {% endif %}
+          </ul>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+{% block full_page_content %}{% endblock %}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ moment.include_moment() }}
+
+{% endblock %}

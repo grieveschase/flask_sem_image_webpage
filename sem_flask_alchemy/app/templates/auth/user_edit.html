@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}User Edit{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+  <h3>User Edit: {{ user }}</h3>
+</div>
+
+<div class="col-md-4">
+  {{ wtf.quick_form(form) }}
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+
+
+  {{ wtf.quick_form(form_delete) }}
+</div>
+
+{% endblock %}

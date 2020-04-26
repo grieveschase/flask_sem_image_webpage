@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}View PFOV{% endblock %}
+{% block page_content %}
+
+{% endblock %}
+{% block full_page_content %}
+<style>
+div.gallery {
+	margin: 1px;
+  border: 1px solid #ccc;
+	float: left;
+	width: 300px;
+  display:inline-block
+}
+div.gallery:hover {
+  border: 1px solid #777;
+}
+div.gallery img {
+	width: 100%;
+  height: auto;
+}
+div.desc {
+  padding: 10px;
+  text-align: center;
+}
+* {
+  box-sizing: border-box;
+}
+.responsive {
+  float: left;
+}
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.tab {
+   overflow: hidden;
+   border: 1px solid #ccc;
+   background-color: #f1f1f1;
+ }
+.tab button {
+ background-color: inherit;
+ float: left;
+ border: none;
+ outline: none;
+ cursor: pointer;
+ padding: 14px 16px;
+ transition: 0.3s;
+ font-size: 17px;
+}
+.tab button:hover {
+ background-color: #ddd;
+}
+.tab button.active {
+ background-color: #ccc;
+}
+.tabcontent {
+ display: none;
+ padding: 6px 12px;
+ border: 1px solid #ccc;
+ border-top: none;
+}
+</style>
+
+<center>
+<h3><b>Tool: {{ meas_tool|title }}</b></h3>
+<h3><b>Lot: {{ lot }}</b></h3>
+<h3><b>Recipe: {{ recipe }}</b></h3>
+<h3><b>Slot: {{ slot }}</b></h3>
+<h4><b>Date: {{ date_meas }}</b></h4>
+<h4><b>Port: {{ port }}</b></h4>
+</center>
+
+<div class="tab" >
+  <button class="tablinks" onclick="openCity(event, 'tab1')" id="defaultOpen">All FOV</button>
+  <button class="tablinks" onclick="openCity(event, 'tab2')">By Target</button>
+</div>
+
+<div id='tab1' class='tabcontent'>
+  {% for slot,fov,iprobe,lot,recipe,site_type,site_order,fieldx,fieldy,locx,locy,date,port,cycle,target,measdate, Picture in info_list %}
+
+			<div class="gallery">
+				<a target="_blank" href="{{ Picture }}">
+					<img src="{{ Picture }}"  width="400" height="400">
+				</a>
+        <div class="desc"><b>Target: {{ target }}</b></div>
+				<div class="desc"><b>Site: {{ site_type }} {{ site_order }}, Field : {{ fieldx }} , {{ fieldy }}</b></div>
+				<div class="desc"><b>FOV: {{ fov }}</b></div>
+				<div class="desc"><b>Location (x,y): {{ locx }},{{ locy }}</b></div>
+				<div class="desc"><b>Iteration at Target: {{ cycle }}</b></div>
+				<div class="desc"><b>{{ date.strftime('%Y-%m-%d %H:%M')  }}</b></div>
+			</div>
+	{% endfor %}
+</div>
+
+<div id='tab2' class='tabcontent'>
+  {% for target, lot_q in target_dict.items() %}
+    <h3>{{ target }}</h3>
+    {% for slot,fov,iprobe,lot,recipe,site_type,site_order,fieldx,fieldy,locx,locy,date,port,cycle,target,measdate, Picture in lot_q %}
+      <div class='responsive'>
+        <div class="gallery">
+  				<a target="_blank" href="{{ Picture }}">
+  					<img src="{{ Picture }}"  width="400" height="400">
+  				</a>
+          <div class="desc"><b>Target: {{ target }}</b></div>
+  				<div class="desc"><b>Site: {{ site_type }} {{ site_order }}, Field : {{ fieldx }} , {{ fieldy }}</b></div>
+  				<div class="desc"><b>FOV: {{ fov }}</b></div>
+  				<div class="desc"><b>Location (x,y): {{ locx }},{{ locy }}</b></div>
+  				<div class="desc"><b>Iteration at Target: {{ cycle }}</b></div>
+  				<div class="desc"><b>{{ date.strftime('%Y-%m-%d %H:%M')  }}</b></div>
+  			</div>
+      </div>
+    {% endfor %}
+    <div class="clearfix"></div>
+  {% endfor %}
+</div>
+
+<script>
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+document.getElementById("defaultOpen").click();
+</script>
+
+{% endblock %}
