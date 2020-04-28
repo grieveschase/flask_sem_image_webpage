@@ -30,7 +30,7 @@ from datetime import timedelta
 @main.route('/', methods=['GET'])
 @login_required
 def index():
-    
+
     if not session['_fresh']:
         logout_user()
 
@@ -46,7 +46,7 @@ def measdisplay_home(tool_route):
     if form.validate_on_submit():
         lotlike = "%{}%".format(str(form.lot.data))
         rcplike = "%{}%".format(str(form.recipe.data))
-        lots = MeasDisplay_Obs.query.with_entities(MeasDisplay_Obs.lot, MeasDisplay_Obs.slot,MeasDisplay_Obs.recipe, MeasDisplay_Obs.port,MeasDisplay_Obs.measdate).filter(MeasDisplay_Obs.tool.like(tool_route), MeasDisplay_Obs.lot.like(lotlike), MeasDisplay_Obs.recipe.like(rcplike)).distinct().all()
+        lots = MeasDisplay_Obs.query.with_entities(MeasDisplay_Obs.lot, MeasDisplay_Obs.slot,MeasDisplay_Obs.recipe, MeasDisplay_Obs.port,MeasDisplay_Obs.measdate).filter(MeasDisplay_Obs.tool.like(tool_route), MeasDisplay_Obs.lot.like(lotlike), MeasDisplay_Obs.recipe.like(rcplike)).order_by(MeasDisplay_Obs.measdate.desc()).distinct().all()
         session['lots_obs'+tool_route] = lots
         return redirect(url_for('.measdisplay_home', tool_route=tool_route))
     return render_template('measdisplay_home.html',
@@ -65,7 +65,6 @@ def measdisplay_view(t,l,s,r,p,dd):
     info_list = []
     for tic in lot_info:
         save_file_name = "C://Python3//sem_flask_alchemy//app//static//FOV//" +str(tic.lot)+str(tic.recipe)+str(tic.target)+str(tic.fieldx)+str(tic.fieldy)+str(tic.site_order)+str(tic.cycle)+str(datetime.datetime.strftime(tic.date,"%Y_%m_%d_%H_%M_%S")) + ".jpg"
-        #save_file_name = "//home//ccag//Python_Scripts//sem_flask_alchemy//app//static//FOV//" +str(tic.lot)+str(tic.recipe)+str(tic.target)+str(tic.fieldx)+str(tic.fieldy)+str(tic.site_order)+str(tic.cycle)+str(datetime.datetime.strftime(tic.date,"%Y_%m_%d_%H_%M_%S")) + ".jpg"
         image = Image.open(io.BytesIO(tic.image))
         image.save(save_file_name)
         image.close()
@@ -96,7 +95,7 @@ def patternfov_home(tool_route):
     if form.validate_on_submit():
         lotlike = "%{}%".format(str(form.lot.data))
         rcplike = "%{}%".format(str(form.recipe.data))
-        lots = PatternFOV.query.with_entities(PatternFOV.lot, PatternFOV.slot,PatternFOV.recipe, PatternFOV.port,PatternFOV.measdate).filter(PatternFOV.tool.like(tool_route), PatternFOV.lot.like(lotlike), PatternFOV.recipe.like(rcplike)).distinct().all()
+        lots = PatternFOV.query.with_entities(PatternFOV.lot, PatternFOV.slot,PatternFOV.recipe, PatternFOV.port,PatternFOV.measdate).filter(PatternFOV.tool.like(tool_route), PatternFOV.lot.like(lotlike), PatternFOV.recipe.like(rcplike)).order_by(PatternFOV.measdate.desc()).distinct().all()
         session['lots_fov'+tool_route] = lots
         return redirect(url_for('.patternfov_home', tool_route=tool_route))
     return render_template('patternfov_home.html',
